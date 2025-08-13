@@ -15,28 +15,22 @@ export const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({ result, star
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
-      // Set the start time and play the video
       video.currentTime = startTime;
       video.play().catch(error => {
-        if (error.name !== 'AbortError') {
-          console.error("Modal video play failed:", error);
-        }
+        if (error.name !== 'AbortError') console.error("Modal video play failed:", error);
       });
+
+      const handleTimeUpdate = () => {
+        if (video.currentTime >= result.endTime!) {
+          video.pause();
+        }
+      };
+
+      video.addEventListener('timeupdate', handleTimeUpdate);
+      return () => video.removeEventListener('timeupdate', handleTimeUpdate);
     }
+  }, [startTime, result.endTime]);
 
-    // Add keyboard listener for closing the modal with Escape key
-    const handleEsc = (event: KeyboardEvent) => {
-       if (event.key === 'Escape') {
-          onClose();
-       }
-    };
-    window.addEventListener('keydown', handleEsc);
-
-    // Cleanup listener on unmount
-    return () => {
-      window.removeEventListener('keydown', handleEsc);
-    };
-  }, [startTime, onClose]);
 
   // This modal is only for videos
   if (result.type !== 'video') {
