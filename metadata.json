@@ -1,0 +1,5 @@
+{
+  "name": "Multimodal Search Interface",
+  "description": "A responsive, modern, multi-tab web application for a multimodal information-retrieval system. It features per-tab state management, configurable search settings, and a dynamic results grid.",
+  "requestFramePermissions": []
+}
